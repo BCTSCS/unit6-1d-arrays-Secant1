@@ -1,3 +1,6 @@
+import java.io.File;
+import java.util.Scanner;
+
 public class DataAnalyzer {
 
     public static int binaryList(int[] numbers, int target) {
@@ -43,10 +46,23 @@ public class DataAnalyzer {
     }
 
     public static void main(String[] args) {
-        int[] arr = {10, 20, 30, 40, 50};
+        Scanner scanner = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
+        File file = new File("numbers.txt");
+        input = new Scanner(file);
 
-        System.out.println("Forward Search (50): " + searchList(arr, 50));
-        System.out.println("Binary Search (50): " + binaryList(arr, 50));
-        System.out.println("Reverse Search (50): " + reverseList(arr, 50));
+        int[] arr = new int[100];
+
+        for (int i = 0; i< 100; i++) {
+            arr[i] = input.nextInt();
+        }
+
+        System.out.print("What number would you like to find: ");
+        int number = scanner.nextInt();
+        System.out.println();
+
+        System.out.println("Forward Search (50): " + searchList(arr, number));
+        System.out.println("Binary Search (50): " + binaryList(arr, number));
+        System.out.println("Reverse Search (50): " + reverseList(arr, number));
     }
 }
