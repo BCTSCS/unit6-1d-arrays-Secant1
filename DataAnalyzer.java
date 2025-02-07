@@ -47,47 +47,27 @@ public class DataAnalyzer {
     }
 
     public static void main(String[] args) {
-        Scanner input = null;
+        Scanner input=null;
         try {
-            File file = new File("C:\\Users\\zipit\\github-classroom\\BCTSCS\\unit6-1d-arrays-Secant1\\numbers.txt");
+            File file = new File( "C:\\Users\\zipit\\github-classroom\\BCTSCS\\unit6-1d-arrays-Secant1\\numbers.txt");
             input = new Scanner(file);
         } catch (IOException error) {
-            System.out.println("Error opening file: " + error.getMessage());
-            System.exit(1);
+            
         }
 
-        // Ensure input is not null before proceeding
-        if (input == null) {
-            System.out.println("Failed to open file.");
-            return;
-        }
 
-        // Read integers dynamically instead of assuming exactly 100 numbers
         int[] arr = new int[100];
-        int count = 0;
-        while (input.hasNextInt() && count < arr.length) {
-            arr[count++] = input.nextInt();
-        }
 
-        if (count == 0) {
-            System.out.println("File is empty or contains no valid integers.");
-            System.exit(1);
+        for (int i = 0; i< 100; i++) {
+            arr[i] = input.nextInt();
         }
 
         System.out.print("What number would you like to find: ");
-        if (!input.hasNextInt()) {
-            System.out.println("No valid input received.");
-            System.exit(1);
-        }
-
         int number = input.nextInt();
         System.out.println();
 
-        // Assuming searchList, binaryList, and reverseList are defined
-        System.out.println("Forward Search: " + searchList(arr, number));
-        System.out.println("Binary Search: " + binaryList(arr, number));
-        System.out.println("Reverse Search: " + reverseList(arr, number));
-
-        input.close(); // Close scanner to prevent resource leaks
+        System.out.println("Forward Search (50): " + searchList(arr, number));
+        System.out.println("Binary Search (50): " + binaryList(arr, number));
+        System.out.println("Reverse Search (50): " + reverseList(arr, number));
     }
 }
