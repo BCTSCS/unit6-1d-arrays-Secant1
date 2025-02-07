@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class DataAnalyzer {
@@ -47,13 +46,10 @@ public class DataAnalyzer {
     }
 
     public static void main(String[] args) {
-        Scanner input=null;
-        try {
-            File file = new File( "C:\\Users\\zipit\\github-classroom\\BCTSCS\\unit6-1d-arrays-Secant1\\numbers.txt");
-            input = new Scanner(file);
-        } catch (IOException error) {
-            
-        }
+
+        Scanner input;
+        File file = new File("C:/Users/zipit/github-classroom/BCTSCS/unit6-1d-arrays-Secant1/numbers.txt");
+        input = new Scanner(file);
 
 
         int[] arr = new int[100];
