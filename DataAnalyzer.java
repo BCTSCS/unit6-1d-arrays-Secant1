@@ -47,20 +47,24 @@ public class DataAnalyzer {
 
     public static void main(String[] args) {
 
-        Scanner input;
-        File file = new File("C:/Users/zipit/github-classroom/BCTSCS/unit6-1d-arrays-Secant1/numbers.txt");
-        input = new Scanner(file);
-
-
+        // Scanner input;
         int[] arr = new int[100];
 
-        for (int i = 0; i< 100; i++) {
-            arr[i] = input.nextInt();
-        }
+        try{
+            File file = new File("C:/Users/zipit/github-classroom/BCTSCS/unit6-1d-arrays-Secant1/numbers.txt");
+            Scanner input = new Scanner(file);
 
-        System.out.print("What number would you like to find: ");
-        int number = input.nextInt();
-        System.out.println();
+
+
+            for (int i = 0; i< 100; i++) {
+                arr[i] = input.nextInt();
+            }
+        }catch(Exception e){}
+
+        // System.out.print("What number would you like to find: ");
+        // int number = input.nextInt();
+        // System.out.println();
+        int number = 0;
 
         System.out.println("Forward Search (50): " + searchList(arr, number));
         System.out.println("Binary Search (50): " + binaryList(arr, number));
