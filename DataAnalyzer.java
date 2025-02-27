@@ -1,110 +1,128 @@
-import FileOperator.FileOperator;
-
+import java.io.*;
+import java.util.*;
+ 
 public class DataAnalyzer {
-
-    String[] countries;
-    int[] populations;
-    double[] unemployment;
-    String[] incomes;
-
-    DataAnalyzer(String path) {
-        countries = FileOperator.toStringArray(path + "countries.txt", 215);
-        populations = FileOperator.toIntArray(path + "populations.txt", 215);
-        unemployment = FileOperator.toDoubleArray(path + "unemployment.txt", 215);
-        incomes = FileOperator.toStringArray(path + "incomes.txt", 215);
+    private String[] countries;
+    private int[] populations;
+    private String[] incomes;
+    private double[] unemploymentRates;
+ 
+    // Constructor to initialize data
+    public DataAnalyzer(String countriesFile, String populationsFile, String incomesFile, String unemploymentFile) {
+        countries = readStringArray(countriesFile);
+        populations = readIntArray(populationsFile);
+        incomes = readIncomeCategoryArray(incomesFile);
+        unemploymentRates = readDoubleArray(unemploymentFile);
     }
-
-    String getCountryByPopulation(int pop) {
-        return countries[FileOperator.getIntIndex(populations, pop)];
+ 
+    // Reads file and returns String array
+    private String[] readStringArray(String filename) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line;
+            while ((line = br.readLine()) != null) {
+                list.add(line);
+            }
+            br.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + filename);
+        }
+        return list.isEmpty() ? new String[0] : list.toArray(new String[0]);
     }
-    String getCountryByUnemployment(double unemp) {
-        return countries[FileOperator.getDoubleIndex(unemployment, unemp)];
+ 
+    // Reads file and returns int array
+    private int[] readIntArray(String filename) {
+        ArrayList<Integer> list = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line;
+            while ((line = br.readLine()) != null) {
+                list.add(Integer.parseInt(line));
+            }
+            br.close();
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Error reading file: " + filename);
+        }
+        return list.isEmpty() ? new int[0] : list.stream().mapToInt(i -> i).toArray();
     }
-    String[] getCountriesByIncome(String income) {
-        String[] tlist = new String[215];
-        int j = 0;
-        for (int i = 0; i < 215; i++) {
-            if (incomes[i] == income) {
-                tlist[j] = countries[i];
-                j++;
+ 
+    // Reads file and returns double array
+    private double[] readDoubleArray(String filename) {
+        ArrayList<Double> list = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line;
+            while ((line = br.readLine()) != null) {
+                list.add(Double.parseDouble(line));
+            }
+            br.close();
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Error reading file: " + filename);
+        }
+        return list.isEmpty() ? new double[0] : list.stream().mapToDouble(d -> d).toArray();
+    }
+ 
+    // Reads file and returns String array for income categories
+    private String[] readIncomeCategoryArray(String filename) {
+        return readStringArray(filename);
+    }
+ 
+    // Identify high-risk communities
+    public void identifyHighRiskCommunities(String incomeCategory, double unemploymentThreshold) {
+        if (countries.length == 0 || incomes.length == 0 || unemploymentRates.length == 0) {
+            System.out.println("Error: One or more datasets are empty. Cannot analyze high-risk communities.");
+            return;
+        }
+       
+        System.out.println("High-risk communities with " + incomeCategory + " and unemployment rate above " + unemploymentThreshold + "%:");
+        for (int i = 0; i < Math.min(countries.length, Math.min(incomes.length, unemploymentRates.length)); i++) {
+            if (incomes[i].equalsIgnoreCase(incomeCategory) && unemploymentRates[i] > unemploymentThreshold) {
+                System.out.println(countries[i]);
             }
         }
-
-        String[] rlist = new String[j];
-        for (int i = 0; i < j; i++) {
-            rlist[i] = tlist[i];
-        }
-        return rlist;
     }
-
-
-    double getIncomeLevelPercent(String income_level) {
-        int i = 0;
-        for (String income : incomes) {
-            if (income.equals(income_level)) {
-                i++;
+ 
+    // Statistical method: Calculate average unemployment rate
+    public double calculateAverageUnemployment() {
+        if (unemploymentRates.length == 0) {
+            System.out.println("Error: No unemployment data available.");
+            return 0;
+        }
+        double sum = 0;
+        for (double rate : unemploymentRates) {
+            sum += rate;
+        }
+        return sum / unemploymentRates.length;
+    }
+ 
+    // Analytical method: Find country with highest unemployment rate
+    public String findHighestUnemploymentCountry() {
+        if (countries.length == 0 || unemploymentRates.length == 0) {
+            System.out.println("Error: No data available.");
+            return "N/A";
+        }
+        int maxIndex = 0;
+        for (int i = 1; i < unemploymentRates.length; i++) {
+            if (unemploymentRates[i] > unemploymentRates[maxIndex]) {
+                maxIndex = i;
             }
         }
-        return (double)i/255;
+        return countries[maxIndex] + " with " + unemploymentRates[maxIndex] + "% unemployment";
     }
-
-    String[] getUnemploymentInterval(double low, double high) {
-        String[] tlist = new String[215];
-        int j = 0;
-        for (int i = 0; i < 215; i++) {
-            if (unemployment[i] >= low && unemployment[i] <= high) {
-                tlist[j] = countries[i];
-                j++;
-            }
-        }
-
-        String[] rlist = new String[j];
-        for (int i = 0; i < j; i++) {
-            rlist[i] = tlist[i];
-        }
-        return rlist;
+ 
+    // Display basic info
+    public void displayInfo() {
+        System.out.println("Total communities analyzed: " + Math.min(countries.length, Math.min(incomes.length, unemploymentRates.length)));
     }
-
-    String[] getPopulationInterval(int low, int high) {
-        String[] tlist = new String[215];
-        int j = 0;
-        for (int i = 0; i < 215; i++) {
-            if (populations[i] >= low && populations[i] <= high) {
-                tlist[j] = countries[i];
-                j++;
-            }
-        }
-
-        String[] rlist = new String[j];
-        for (int i = 0; i < j; i++) {
-            rlist[i] = tlist[i];
-        }
-        return rlist;
-    }
-
+ 
+    // Main method for testing
     public static void main(String[] args) {
-        DataAnalyzer analyzer = new DataAnalyzer("C:/Users/zipit/github-classroom/BCTSCS/unit6-1d-arrays-Secant1/data/");
-    
-        // Showcase method functionalities
-        System.out.println("Country with population 331002651: " + analyzer.getCountryByPopulation(331002651));
-        System.out.println("Country with 5.5% unemployment: " + analyzer.getCountryByUnemployment(5.5));
-    
-        System.out.println("\nCountries with 'High income':");
-        for (String country : analyzer.getCountriesByIncome("High income")) {
-            System.out.println(country);
-        }
-    
-        System.out.println("\nPercentage of 'Low income' countries: " + analyzer.getIncomeLevelPercent("Low income") * 100 + "%");
-    
-        System.out.println("\nCountries with unemployment rate between 3.0% and 7.0%:");
-        for (String country : analyzer.getUnemploymentInterval(3.0, 7.0)) {
-            System.out.println(country);
-        }
-    
-        System.out.println("\nCountries with populations between 10M and 100M:");
-        for (String country : analyzer.getPopulationInterval(10000000, 100000000)) {
-            System.out.println(country);
-        }
+        DataAnalyzer data = new DataAnalyzer("countries.txt", "populations.txt", "incomes.txt", "unemployment.txt");
+        data.displayInfo();
+        data.identifyHighRiskCommunities("low income", 10);
+        System.out.println("Average Unemployment Rate: " + data.calculateAverageUnemployment() + "%");
+        System.out.println("Country with Highest Unemployment: " + data.findHighestUnemploymentCountry());
     }
-    
 }
+ 

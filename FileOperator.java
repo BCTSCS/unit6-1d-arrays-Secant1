@@ -1,11 +1,9 @@
-package FileOperator;
-
 import java.io.*;
 import java.util.*;
 
 public class FileOperator {
 
-    public static ArrayList<String> toStringArray(String filename) {
+    public static String[] toStringArray(String filename) {
         ArrayList<String> arr = new ArrayList<>();
         try {
             Scanner myReader = new Scanner(new File(filename));
@@ -16,10 +14,13 @@ public class FileOperator {
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
-        return arr;
+
+        String[] r = new String[arr.size()];
+        return arr.toArray(r);
+
     }
 
-    public static ArrayList<Integer> toIntArray(String filename) {
+    public static Integer[] toIntArray(String filename) {
         ArrayList<Integer> arr = new ArrayList<>();
         try {
             Scanner myReader = new Scanner(new File(filename));
@@ -30,10 +31,12 @@ public class FileOperator {
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
-        return arr;
+
+        Integer[] r = new Integer[arr.size()];
+        return arr.toArray(r);
     }
 
-    public static ArrayList<Double> toDoubleArray(String filename) {
+    public static Double[] toDoubleArray(String filename) {
         ArrayList<Double> arr = new ArrayList<>();
         try {
             Scanner myReader = new Scanner(new File(filename));
@@ -44,7 +47,9 @@ public class FileOperator {
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
-        return arr;
+        
+        Double[] r = new Double[arr.size()];
+        return arr.toArray(r);
     }
 
     public static int getStringIndex(String[] arr, String value) {
@@ -57,7 +62,7 @@ public class FileOperator {
         }
         return index;
     }
-    public static int getDoubleIndex(double[] arr, double value) {
+    public static int getDoubleIndex(Double[] arr, double value) {
         int index = -1;
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == value) {
@@ -67,7 +72,7 @@ public class FileOperator {
         }
         return index;
     }
-    public static int getIntIndex(int[] arr, int value) {
+    public static int getIntIndex(Integer[] arr, int value) {
         int index = -1;
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == value) {
