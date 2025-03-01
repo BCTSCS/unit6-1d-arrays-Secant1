@@ -5,7 +5,7 @@ public class DataGUI extends JFrame {
     private JTextField inputField;
     private JButton statusButton, percentageButton;
     private JTextArea resultsArea;
-    private DataAnalyzer analyzer;
+    private CountryAnalyzer analyzer;
  
     public DataGUI() {
         super("Data Analysis Tool");
@@ -14,7 +14,7 @@ public class DataGUI extends JFrame {
         setLayout(new FlowLayout());
  
         // Initialize data analyzer with data files
-        analyzer = new DataAnalyzer("countries.txt", "populations.txt",
+        analyzer = new CountryAnalyzer("countries.txt", "populations.txt",
                                   "incomes.txt", "unemployment.txt");
  
         // Create components
